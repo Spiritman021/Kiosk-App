@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp"
+    android:background="#D32F2F">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_block"
+        android:layout_marginBottom="32dp" />
+
+    <TextView
+        android:id="@+id/blockedAppText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Access Blocked!"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:lineSpacingExtra="8dp"
+        android:layout_marginBottom="48dp" />
+
+    <Button
+        android:id="@+id/btnGoHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go to BlockIt Home"
+        android:textColor="#D32F2F"
+        android:background="@drawable/button_white"
+        android:padding="16dp"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnLockScreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lock Screen"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button_transparent"
+        android:padding="16dp"
+        android:textAllCaps="false"
+        android:textSize="16sp" />
+
+</LinearLayout>

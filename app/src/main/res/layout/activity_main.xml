@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#1a1a1a">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BlockIt"
+            android:textSize="32sp"
+            android:textColor="#FF6B35"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="App Blocker"
+            android:textSize="16sp"
+            android:textColor="#CCCCCC"
+            android:gravity="center"
+            android:layout_marginBottom="32dp" />
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status: Checking..."
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:background="#2a2a2a"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp"
+            android:lineSpacingExtra="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Required Permissions"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/btnUsageStats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Grant Usage Stats Access"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btnOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Grant Display Over Other Apps"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btnAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Activate Device Admin"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btnNotification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Grant Notification Permission"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Service Controls"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/btnStartService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start Blocking Service"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_start"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            android:textAllCaps="false"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnStopService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stop Blocking Service"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_stop"
+            android:padding="16dp"
+            android:textAllCaps="false"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Only Phone Dialer app is allowed.\nAll other apps will be blocked."
+            android:textSize="12sp"
+            android:textColor="#999999"
+            android:gravity="center"
+            android:layout_marginTop="24dp"
+            android:lineSpacingExtra="2dp" />
+
+    </LinearLayout>
+
+</ScrollView>
