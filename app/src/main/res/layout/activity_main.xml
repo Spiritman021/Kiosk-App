@@ -1,142 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="#1a1a1a">
+    android:background="#1a1a1a"
+    android:padding="16dp"
+    android:fitsSystemWindows="true">
 
+    <!-- Header with Title and Settings Icon -->
     <LinearLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="BlockIt"
-            android:textSize="32sp"
+            android:textSize="28sp"
             android:textColor="#FF6B35"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="App Blocker"
-            android:textSize="16sp"
-            android:textColor="#CCCCCC"
-            android:gravity="center"
-            android:layout_marginBottom="32dp" />
-
-        <TextView
-            android:id="@+id/statusText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Status: Checking..."
-            android:textSize="14sp"
-            android:textColor="#FFFFFF"
-            android:background="#2a2a2a"
-            android:padding="16dp"
-            android:layout_marginBottom="24dp"
-            android:lineSpacingExtra="4dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Required Permissions"
-            android:textSize="18sp"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
-
-        <Button
-            android:id="@+id/btnUsageStats"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Grant Usage Stats Access"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
-            android:padding="16dp"
-            android:layout_marginBottom="12dp"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/btnOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Grant Display Over Other Apps"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
-            android:padding="16dp"
-            android:layout_marginBottom="12dp"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/btnAdmin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Activate Device Admin"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
-            android:padding="16dp"
-            android:layout_marginBottom="12dp"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/btnNotification"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Grant Notification Permission"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_background"
-            android:padding="16dp"
-            android:layout_marginBottom="24dp"
-            android:textAllCaps="false" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Service Controls"
-            android:textSize="18sp"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
-
-        <Button
-            android:id="@+id/btnStartService"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Start Blocking Service"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_start"
-            android:padding="16dp"
-            android:layout_marginBottom="12dp"
-            android:textAllCaps="false"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btnStopService"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Stop Blocking Service"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/button_stop"
-            android:padding="16dp"
-            android:textAllCaps="false"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Only Phone Dialer app is allowed.\nAll other apps will be blocked."
-            android:textSize="12sp"
-            android:textColor="#999999"
-            android:gravity="center"
-            android:layout_marginTop="24dp"
-            android:lineSpacingExtra="2dp" />
+        <ImageButton
+            android:id="@+id/btnSettings"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_preferences"
+            android:tint="#FFFFFF"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:contentDescription="Settings" />
 
     </LinearLayout>
 
-</ScrollView>
+    <!-- Launcher Section -->
+    <LinearLayout
+        android:id="@+id/launcherSection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- Apps Grid -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/launcherAppsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+        <!-- Empty State -->
+        <LinearLayout
+            android:id="@+id/emptyState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📱"
+                android:textSize="64sp"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Apps Yet"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tap the settings icon to add apps"
+                android:textSize="14sp"
+                android:textColor="#999999"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

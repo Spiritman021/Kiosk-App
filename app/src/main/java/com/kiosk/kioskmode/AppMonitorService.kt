@@ -20,12 +20,7 @@ class AppMonitorService : Service() {
     private val checkInterval = 500L
     private var lastCheckedTime = System.currentTimeMillis()
     
-    private val allowedPackages = setOf(
-        "com.google.android.dialer",
-        "com.blockit.appblocker", // Our own app
-        "com.android.systemui" // System UI
-    )
-
+    private lateinit var whitelistManager: WhitelistManager
     private lateinit var usageStatsManager: UsageStatsManager
 
     private val monitorRunnable = object : Runnable {
@@ -37,6 +32,7 @@ class AppMonitorService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        whitelistManager = WhitelistManager(this)
         usageStatsManager = getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
         startForeground(1, createNotification())
     }
@@ -81,7 +77,7 @@ class AppMonitorService : Service() {
     }
 
     private fun isPackageAllowed(packageName: String): Boolean {
-        return allowedPackages.contains(packageName)
+        return whitelistManager.isWhitelisted(packageName)
     }
 
     private fun blockApp(packageName: String) {
