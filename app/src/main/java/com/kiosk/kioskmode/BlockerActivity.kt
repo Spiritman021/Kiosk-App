@@ -30,7 +30,7 @@ class BlockerActivity : AppCompatActivity() {
 
         val blockedPackage = intent.getStringExtra("blocked_package") ?: "Unknown App"
         val appName = getAppName(blockedPackage)
-        blockedAppText.text = "Access Blocked!\n\n\"$appName\" is not allowed.\n\nOnly Phone Dialer is permitted."
+        blockedAppText.text = "Access Blocked!\n\n\"$appName\" is not allowed.\n\nOnly whitelisted apps are permitted."
 
         btnGoHome.setOnClickListener {
             val homeIntent = Intent(this, MainActivity::class.java)
