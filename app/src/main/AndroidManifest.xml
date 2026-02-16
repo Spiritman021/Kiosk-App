@@ -35,7 +35,7 @@
         <activity
             android:name="com.kiosk.kioskmode.BlockerActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:launchMode="singleTask"
             android:excludeFromRecents="true"
             android:taskAffinity="" />
