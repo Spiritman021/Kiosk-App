@@ -41,9 +41,47 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         btnSettings.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
+            showPasswordDialog()
         }
+    }
+
+    private fun showPasswordDialog() {
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle("Enter Password")
+        builder.setMessage("Enter password to access settings")
+
+        val input = android.widget.EditText(this)
+        input.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        input.hint = "Password"
+        
+        val container = android.widget.FrameLayout(this)
+        val params = android.widget.FrameLayout.LayoutParams(
+            android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+            android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+        )
+        params.leftMargin = resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 2
+        params.rightMargin = resources.getDimensionPixelSize(android.R.dimen.app_icon_size) / 2
+        input.layoutParams = params
+        container.addView(input)
+        
+        builder.setView(container)
+
+        builder.setPositiveButton("OK") { dialog, _ ->
+            val password = input.text.toString()
+            if (password == "1234@5678") {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.cancel()
+        }
+
+        builder.show()
     }
 
     private fun setupLauncherGrid() {
