@@ -43,7 +43,7 @@
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:label="Manage Allowed Apps" />
 
         <receiver
