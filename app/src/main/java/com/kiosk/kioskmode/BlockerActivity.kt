@@ -33,18 +33,14 @@ class BlockerActivity : AppCompatActivity() {
         blockedAppText.text = "Access Blocked!\n\n\"$appName\" is not allowed.\n\nOnly whitelisted apps are permitted."
 
         btnGoHome.setOnClickListener {
-            val homeIntent = Intent(this, MainActivity::class.java)
-            homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(homeIntent)
-            finish()
+            goToHome()
         }
 
         btnLockScreen.setOnClickListener {
             if (devicePolicyManager.isAdminActive(adminComponent)) {
                 devicePolicyManager.lockNow()
             }
-            finish()
+            goToHome()
         }
     }
 
@@ -58,9 +54,27 @@ class BlockerActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val homeIntent = Intent(Intent.ACTION_MAIN)
-        homeIntent.addCategory(Intent.CATEGORY_HOME)
-        homeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        // Always go to MainActivity, never allow back navigation
+        goToHome()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // If user tries to leave blocker (e.g., via recent apps), ensure we go home
+        finish()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Ensure we always finish when stopped
+        finish()
+    }
+
+    private fun goToHome() {
+        val homeIntent = Intent(this, MainActivity::class.java)
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(homeIntent)
         finish()
     }
