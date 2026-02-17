@@ -20,26 +20,11 @@ import androidx.core.app.NotificationCompat
 class AppMonitorService : Service() {
 
     private val handler = Handler(Looper.getMainLooper())
-    private val checkInterval = 300L // Reduced from 500ms for faster detection
+    private val checkInterval = 500L // Back to 500ms for stability
     private var lastCheckedTime = System.currentTimeMillis()
-    private var lastBlockedPackage: String? = null
-    private var lastBlockedTime = 0L
     
     private lateinit var whitelistManager: WhitelistManager
     private lateinit var usageStatsManager: UsageStatsManager
-    private lateinit var activityManager: ActivityManager
-
-    // System packages that should always be allowed (lazy to avoid accessing packageName too early)
-    private val systemPackages by lazy {
-        setOf(
-            "com.android.systemui",
-            "com.miui.home", // MIUI launcher
-            "com.mi.android.globallauncher", // MIUI global launcher
-            "com.android.launcher3", // Stock Android launcher
-            "com.google.android.apps.nexuslauncher", // Pixel launcher
-            packageName // Our own app - safe to access here because lazy
-        )
-    }
 
     private val monitorRunnable = object : Runnable {
         override fun run() {
@@ -52,7 +37,6 @@ class AppMonitorService : Service() {
         super.onCreate()
         whitelistManager = WhitelistManager(this)
         usageStatsManager = getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
-        activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         startForeground(1, createNotification())
         Log.d(TAG, "AppMonitorService created and started")
     }
@@ -73,28 +57,28 @@ class AppMonitorService : Service() {
 
     private fun checkForegroundApp() {
         try {
-            // Method 1: Check using UsageStats (most reliable on modern Android)
-            val foregroundPackage = getForegroundPackageFromUsageStats()
-            
-            // Method 2: Fallback to ActivityManager for older devices or if UsageStats fails
-            val fallbackPackage = if (foregroundPackage == null) {
-                getForegroundPackageFromActivityManager()
-            } else null
+            val currentTime = System.currentTimeMillis()
+            val events = usageStatsManager.queryEvents(lastCheckedTime - 1000, currentTime)
+            val event = UsageEvents.Event()
 
-            val currentPackage = foregroundPackage ?: fallbackPackage
+            var foregroundPackage: String? = null
 
-            currentPackage?.let { packageName ->
-                Log.d(TAG, "Current foreground app: $packageName")
-                
+            while (events.hasNextEvent()) {
+                events.getNextEvent(event)
+                if (event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                    foregroundPackage = event.packageName
+                }
+            }
+
+            lastCheckedTime = currentTime
+
+            foregroundPackage?.let { packageName ->
+                Log.d(TAG, "Foreground app: $packageName")
                 if (!isPackageAllowed(packageName)) {
-                    // Prevent blocking the same app multiple times in quick succession
-                    val currentTime = System.currentTimeMillis()
-                    if (packageName != lastBlockedPackage || currentTime - lastBlockedTime > 2000) {
-                        Log.w(TAG, "Blocking non-whitelisted app: $packageName")
-                        blockApp(packageName)
-                        lastBlockedPackage = packageName
-                        lastBlockedTime = currentTime
-                    }
+                    Log.w(TAG, "Blocking: $packageName")
+                    blockApp(packageName)
+                } else {
+                    Log.d(TAG, "Allowed: $packageName")
                 }
             }
         } catch (e: Exception) {
@@ -102,71 +86,25 @@ class AppMonitorService : Service() {
         }
     }
 
-    private fun getForegroundPackageFromUsageStats(): String? {
-        try {
-            val currentTime = System.currentTimeMillis()
-            // Increased time window to catch more events
-            val events = usageStatsManager.queryEvents(lastCheckedTime - 2000, currentTime)
-            val event = UsageEvents.Event()
-
-            var foregroundPackage: String? = null
-
-            while (events.hasNextEvent()) {
-                events.getNextEvent(event)
-                // Check both MOVE_TO_FOREGROUND and ACTIVITY_RESUMED
-                if (event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND ||
-                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && 
-                     event.eventType == UsageEvents.Event.ACTIVITY_RESUMED)) {
-                    foregroundPackage = event.packageName
-                }
-            }
-
-            lastCheckedTime = currentTime
-            return foregroundPackage
-        } catch (e: Exception) {
-            Log.e(TAG, "Error getting foreground package from UsageStats", e)
-            return null
-        }
-    }
-
-    private fun getForegroundPackageFromActivityManager(): String? {
-        return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val tasks = activityManager.getRunningTasks(1)
-                if (tasks.isNotEmpty()) {
-                    tasks[0].topActivity?.packageName
-                } else {
-                    null
-                }
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error getting foreground package from ActivityManager", e)
-            null
-        }
-    }
-
     private fun isPackageAllowed(packageName: String): Boolean {
-        // Always allow system packages
-        if (systemPackages.contains(packageName)) {
-            Log.d(TAG, "Allowing system package: $packageName")
-            return true
-        }
-        
-        // Check if package is in whitelist
+        // Check whitelist first (includes system packages from WhitelistManager)
         val isWhitelisted = whitelistManager.isWhitelisted(packageName)
-        Log.d(TAG, "Package $packageName whitelisted: $isWhitelisted")
-        return isWhitelisted
+        
+        // Also check MIUI launchers explicitly
+        val isMIUILauncher = packageName == "com.miui.home" || 
+                            packageName == "com.mi.android.globallauncher" ||
+                            packageName == "com.android.launcher3" ||
+                            packageName == "com.google.android.apps.nexuslauncher" ||
+                            packageName == "com.android.systemui"
+        
+        return isWhitelisted || isMIUILauncher
     }
 
     private fun blockApp(packageName: String) {
-        Log.w(TAG, "Blocking app: $packageName")
         val intent = Intent(this, BlockerActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-            addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
             putExtra("blocked_package", packageName)
         }
         startActivity(intent)
