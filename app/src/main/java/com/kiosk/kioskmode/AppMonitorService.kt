@@ -29,15 +29,17 @@ class AppMonitorService : Service() {
     private lateinit var usageStatsManager: UsageStatsManager
     private lateinit var activityManager: ActivityManager
 
-    // System packages that should always be allowed
-    private val systemPackages = setOf(
-        "com.android.systemui",
-        "com.miui.home", // MIUI launcher
-        "com.mi.android.globallauncher", // MIUI global launcher
-        "com.android.launcher3", // Stock Android launcher
-        "com.google.android.apps.nexuslauncher", // Pixel launcher
-        packageName // Our own app
-    )
+    // System packages that should always be allowed (lazy to avoid accessing packageName too early)
+    private val systemPackages by lazy {
+        setOf(
+            "com.android.systemui",
+            "com.miui.home", // MIUI launcher
+            "com.mi.android.globallauncher", // MIUI global launcher
+            "com.android.launcher3", // Stock Android launcher
+            "com.google.android.apps.nexuslauncher", // Pixel launcher
+            packageName // Our own app - safe to access here because lazy
+        )
+    }
 
     private val monitorRunnable = object : Runnable {
         override fun run() {
