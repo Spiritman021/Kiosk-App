@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1a1a1a"
+    android:background="@color/light_bg"
     android:padding="16dp"
     android:fitsSystemWindows="true">
 
@@ -30,7 +30,7 @@
             android:layout_height="56dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_preferences"
-            android:tint="#FFFFFF"
+            android:tint="@color/text_primary"
             android:padding="8dp"
             android:scaleType="fitCenter"
             android:contentDescription="Settings" />
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:text="No Apps Yet"
                 android:textSize="20sp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/text_primary"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
