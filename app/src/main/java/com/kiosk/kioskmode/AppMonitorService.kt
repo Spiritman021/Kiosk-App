@@ -114,7 +114,7 @@ class AppMonitorService : Service() {
         )
 
         return NotificationCompat.Builder(this, channelId)
-            .setContentTitle("BlockIt Active")
+            .setContentTitle("Crescent Launcher Active")
             .setContentText("Monitoring apps")
             .setSmallIcon(R.drawable.ic_notification)
             .setContentIntent(pendingIntent)

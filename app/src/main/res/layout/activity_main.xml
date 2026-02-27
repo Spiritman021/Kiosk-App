@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="BlockIt"
+            android:text="Crescent Launcher"
             android:textSize="28sp"
             android:textColor="#FF6B35"
             android:textStyle="bold" />

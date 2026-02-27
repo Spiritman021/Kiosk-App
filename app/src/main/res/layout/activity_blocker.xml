@@ -30,7 +30,7 @@
         android:id="@+id/btnGoHome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Go to BlockIt Home"
+        android:text="Go to Crescent Launcher Home"
         android:textColor="#D32F2F"
         android:background="@drawable/button_white"
         android:padding="16dp"
